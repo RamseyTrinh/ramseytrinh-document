@@ -9,9 +9,7 @@ theme:
     code: Red Hat Mono
   icon:
     logo: material/developer-board
-  favicon: 
-  features:
-    - navigation.footer
+  favicon: assets/favicon.ico
   palette: 
   - scheme: slate
     toggle:
