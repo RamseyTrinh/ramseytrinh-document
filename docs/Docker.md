@@ -1,20 +1,34 @@
 # Docker cheat sheet
 
-## Docker Commands, Help & Tips
-
-### Docker version
+## Docker version
 
 ```shell
 $ docker version
 ```
 
-### Show info
+## Show info
 
 ```shell
 $ docker info
 ```
+## Some flag in command
 
-### IMAGE COMMANDS
+```bash
+-d: run in "detached" mode
+-i: keep STDIN open 
+-t: allocate a terminal interating with container
+-it: access terminal
+--name: name
+-p: map ports
+--rm: remove the container when it exits.
+-v: mout a volume
+--network: specify the network (Default: bridge)
+-e: environment variables
+--link: link to another running container
+--restart: set the restart policy
+```
+
+## Images commands
 
 ### List images
 
@@ -68,7 +82,7 @@ MYSQL:
 ```bash
 $ docker container run -d -p 3306:3306 --name mysql --env MYSQL_ROOT_PASSWORD=123456 mysql
 ```
-###  CONTAINERS
+## Containers commands
 
 ### Create and run
 
@@ -76,60 +90,43 @@ $ docker container run -d -p 3306:3306 --name mysql --env MYSQL_ROOT_PASSWORD=12
 $ docker container run -it -p 80:80 nginx
 ```
 
-### Some flag in command run Containers
-
-```bash
--d: run in "detached" mode
--i: keep STDIN open 
--t: allocate a terminal interating with container
--it: access terminal
---name: name
--p: map ports
---rm: remove the container when it exits.
--v: mout a volume
---network: specify the network (Default: bridge)
--e: environment variables
---link: link to another running container
---restart: set the restart policy
-```
-
-### List running containers
+### List running
 
 ```
 $ docker ps
 ```
 
-### List all containers (Even if not running)
+### List all
 
 ```
 $ docker ps -a
 ```
 
-### Stop container
+### Stop
 
 ```
 $ docker container stop []
 ```
 
-### Stop all running containers
+### Stop all running
 
 ```
 $ docker stop $(docker ps -aq)
 ```
 
-### To remove a running container use force(-f)
+### Force remove
 
 ```
 $ docker container rm -f [ID]
 ```
 
-### Remove multiple containers
+### Remove multiple
 
 ```
 $ docker container rm [ID] [ID] [ID]
 ```
 
-### Remove all containers
+### Remove all
 
 ```
 $ docker rm $(docker ps -aq)
@@ -141,29 +138,23 @@ $ docker rm $(docker ps -aq)
 $ docker container logs [NAME]
 ```
 
-### List processes running in container
-
-```
-$ docker container top [NAME]
-```
-
-#### TIP: ABOUT CONTAINERS
+### TIP: About containers
 
 Docker containers are often compared to virtual machines but they are actually just processes running on your host os. In Windows/Mac, Docker runs in a mini-VM so to see the processes youll need to connect directly to that. On Linux however you can run "ps aux" and see the processes directly
 
-### View info on container
+### View info
 
 ```
 $ docker container inspect [NAME]
 ```
 
-### Performance stats (cpu, mem, network, disk, etc)
+### Performance stats info
 
 ```
 $ docker container stats [NAME]
 ```
 
-### Access an already created container
+### Access an already created
 
 ```
 $ docker container start -ai ubuntu
@@ -175,20 +166,9 @@ $ docker container start -ai ubuntu
 $ docker container exec -it mysql bash
 ```
 
-# Limiting The Memory Usage For Containers
+## Networking
 
-In order to limit the amount of memory a docker container process can use, simply set the -m [memory amount] flag with the limit.
-
-To run a container with memory limited to 256 MBs:
-
-##### Example: docker run -name [name] -m [Memory (int)][memory unit (b, k, m or g)] -d (to run not to attach) -p (to set access and expose ports) [image ID]
-```
-$ docker run -m 64m -d -p 8082:80 tutum/wordpress
-```
-
-# NETWORKING
-
-### "bridge" or "docker0" is the default network
+"bridge" or "docker0" is the default network
 
 ### Get port
 
@@ -246,7 +226,7 @@ To remove the network by name or id, multiple can be deleted:
 $ docker network rm [NETWORK_NAME] [NETWORK_NAME]
 ```
 
-# IMAGE TAGGING & PUSHING TO DOCKERHUB
+## Image tagging & Push to Dockerhub
 
 ```
 $ docker image ls
@@ -262,4 +242,49 @@ $ docker image tag nginx btraversy/nginx
 
 ```
 $ docker image push bradtraversy/nginx
+```
+
+## Volumes
+
+Volume - Makes special location outside of container UFS. Used for databases
+Bind Mount -Link container path to host path
+
+### Check volumes
+
+```
+$ docker volume ls
+```
+
+### Cleanup unused volumes
+
+```
+$ docker volume prune
+```
+
+
+
+### TIP: Mounts
+
+- You will also see the volume under mounts
+- Container gets its own uniqe location on the host to store that data
+- Source: xxx is where it lives on the host
+
+### Check volumes
+
+```
+$ docker volume ls
+```
+
+**There is no way to tell volumes apart for instance with 2 mysql containers, so we used named volumes**
+
+### Named volumes (Add -v command)
+
+```
+$ docker container run -d --name mysql -v mysql-db:/var/lib/mysql mysql
+```
+
+### Inspect new named volume
+
+```bash
+docker volume inspect mysql-db
 ```
