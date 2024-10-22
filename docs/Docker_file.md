@@ -56,7 +56,7 @@ $ docker image push ramseytrinh/nginx:latest
 - Configure relationships between containers
 - Save our docker container run settings in easy to read file
 
-### Sample compose file (From Bret Fishers course)
+### Sample compose file
 
 ```
 version: '2'
